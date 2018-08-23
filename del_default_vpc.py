@@ -29,10 +29,8 @@ def scan_region(region_name, profile):
             del_vpc(vpc_id, ec2)
 
     except Exception as e:
-        print(e)
-        available_sessions = boto3.Session()
-        profiles = available_sessions.available_profiles
-        print("The profiles you have available are:")
+        profiles = boto3.Session().available_profiles
+        print("{}. The profiles you have available are:".format(e))
         print(" ".join(str(item) for item in profiles))
 
 
@@ -67,6 +65,7 @@ def del_igw(vpc_id, ec2):
         print("No IGW found attached to {}".format(vpc_id))
     else:
         igw_id = response['InternetGateways'][0]['InternetGatewayId']
+
         data = ec2.detach_internet_gateway(
             InternetGatewayId=igw_id,
             VpcId=vpc_id
@@ -89,9 +88,7 @@ def del_vpc(vpc_id, ec2):
 
 
 try:
-
     profile = sys.argv[1]
-
     boto3.setup_default_session(profile_name=profile)
     ec2 = boto3.client('ec2')
     regions = ec2.describe_regions()
