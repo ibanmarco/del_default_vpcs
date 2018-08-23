@@ -97,8 +97,6 @@ try:
         scan_region(region['RegionName'], profile)
 
 except Exception as e:
-    print(e)
-    available_sessions = boto3.Session()
-    profiles = available_sessions.available_profiles
-    print("You have available the following profiles:")
+    profiles = boto3.Session().available_profiles
+    print("{}. The profiles you have available are:".format(e))
     print(" ".join(str(item) for item in profiles))
